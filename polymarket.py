@@ -38,7 +38,9 @@ def fetch_market_page(offset, limit):
     params = {
         "limit" : limit,
         "tag_slug" : "nba",
-        "offset" : offset
+        "offset" : offset,
+        "active" : "true",
+        "closed" : "false"
     }
 
     #we will then use try and except block to store the response for polymarket
@@ -71,10 +73,13 @@ def parse_market(market):
         return None
 #Get the list of markets
     market_data = markets[0]
-
+    if market_data.get("closed"):
+        return None
 #Get prices
     prices = market_data.get("outcomePrices",[])
-    prices = json.loads(prices)
+    #checks if its a string runs prices to put it in a list
+    if isinstance(prices, str):
+        prices = json.loads(prices)
     if not prices:
         return None
     yes_price = float(prices[0])
@@ -82,13 +87,13 @@ def parse_market(market):
 
 #Check liquidity
     liquidity = float(market_data.get("liquidityNum", 0))
-    if liquidity < 5000:
-        return None
+    # if liquidity < 5000:
+    #     return None
 
 #Check Volume
     volume = float(market_data.get("volumeNum", 0))
-    if volume < 100:
-        return None
+    # if volume < 100:
+    #     return None
     
     #Return dictonaary
     return {
