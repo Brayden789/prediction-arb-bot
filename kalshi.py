@@ -102,23 +102,23 @@ def parse_market(market):
         return None
 
     #check for liquidity
-    liquidity = float(market.get("liquidity"))
+    liquidity = float(market.get("liquidity_dollars"))
     # if liquidity < 0:
     #     return None
 
     #check for volume
-    volume = float(market.get("volume_24h"))
+    volume = float(market.get("volume_24h_fp"))
     # if volume < 0:
     #     return None
     #convert prices like 84 to 0.84
-    yesWhole_price = market.get("yes_ask")
-    noWhole_price = market.get("no_ask")
+    yesWhole_price = market.get("yes_ask_dollars")
+    noWhole_price = market.get("no_ask_dollars")
 
     if yesWhole_price is None or noWhole_price is None:
         return None
 
-    yes_price = yesWhole_price /100
-    no_price = noWhole_price /100
+    yes_price = float(yesWhole_price)
+    no_price = float(noWhole_price)
     # if it passed return the data
     return {
     "id" : market.get("ticker"),

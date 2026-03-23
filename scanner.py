@@ -4,6 +4,7 @@ from polymarket import get_all_nba_markets as get_polymarket_markets
 from dotenv import load_dotenv
 import os
 load_dotenv()
+from alerts import send_alert
 
 #Function gets the name of each team from the kalshi market then throws it
 #Into the teams lookup then gets back the correct name
@@ -54,6 +55,12 @@ def main():
             print(f"  Kalshi YES + Poly NO: ${combo_one:.3f}")
             print(f"  Kalshi NO + Poly YES: ${combo_two:.3f}")
             print()
+
+        if combo_one < 0.93:
+            send_alert(f"🚨 ARB FOUND: {market['event_title']}\nKalshi YES + Poly NO: ${combo_one:.3f}")
+
+        if combo_two < 0.93:
+            send_alert(f"🚨 ARB FOUND: {market['event_title']}\nKalshi NO + Poly YES: ${combo_two:.3f}")
 
 if __name__ == "__main__" :
     main()
